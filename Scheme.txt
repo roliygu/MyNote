@@ -1,0 +1,181 @@
+> (+ 2 3)
+5
+> (+ (* 3(+ (* 2 4)(+ 3 5)))(+(- 10 7) 6))
+57
+======================================================================================
+> (define size 2)
+> size
+2
+> (* size size)
+4
+======================================================================================
+> (define (square x)(* x x))                                           #最直接的子函数
+> (square 10)
+100
+> (define (sum-squares x y)(+ (square x) (square y)))                  #嵌套过一层
+> (sum-squares 9 1)
+82
+> (define (f a) (sum-squares (+ a 1) (* a 2)))           #嵌套两层，f的参数a +1和*2之
+> (f 5)                                                  后传给sum-squares函数再继续传
+136
+======================================================================================
+> (define (abs x)
+    (cond ((< x 0) (- x))
+          (else x)))
+> (abs -10)
+10
+> (define (abs2 x)
+    (if(< x 0)(- x)
+     x))
+> (abs2 -10)
+10
+
+> (define (>= x y)                                        #定义了一个新的谓语‘>=’
+    (or (> x y)(= x y)))                                   就是（x>y）or (x==y)
+> (>= 10 10)
+#t
+> (>= 9 10)
+#f
+======================================================================================
+> (define (sqrt x)
+    (define (good-enough? guess x)
+      (< (abs (- (square guess) x)) 0.001))
+     (define (improve guess x)
+       (average guess (/ x guess)))
+    (define (sqrt-iter guess x)
+      (if (good-enough? guess x)
+          guess 
+          (sqrt-iter(improve guess x) x)))
+    (define (average x y)(/ (+ x y) 2))
+    (sqrt-iter 1.0 x))
+> (sqrt 100)
+10.000000000139897
+======================================================================================
+(define (gcd a b)
+    (if (= b 0) a 
+        (gcd b (remainder a b))))
+======================================================================================
+> (define (factorial n)
+    (if (= n 1) 
+        1
+        (* n (factorial (- n 1)))))
+> (factorial 6)
+720
+> (define (factorial2 n)
+    (define (re pro acc n)
+      (if (> acc n) 
+          pro
+          (re (* pro acc) (+ 1 acc) n)))
+    (re 1 1 n)
+    )
+> (factorial2 6)
+720
+======================================================================================
+>(define (fib n)
+  (define (f a b acc n)
+    (if (= acc n) 
+        b
+        (f (+ a b) a (+ acc 1) n)))
+  (f 0 1 0 n))
+>(fib 5)
+3
+======================================================================================
+(define (T m n)
+  (cond((= m 0) 1)
+       ((or(< m 0)(= n 0)) 0)
+       (else (+ (T m (- n 1)) (T (- m (first-coin n))n)))))
+  (define (first-coin kindsofn)
+  (cond ((= kindsofn 1) 1)
+        ((= kindsofn 2) 5)
+        ((= kindsofn 3) 10)
+        ((= kindsofn 4) 25)
+        ((= kindsofn 5) 50)))
+########################## T(m,n)=T(m,n-1)+T(m-a,n) ##################################
+########################## T(0,n)=1,T(m<0,n)=T(m,0)=0 ################################
+======================================================================================
+(define (prime? n)
+  (define (smallest-divisor n) (find-divisor n 2))
+  (define (find-divisor n test-divisor)
+    (cond ((> (* test-divisor test-divisor) n)n)
+          ((divides? test-divisor n) test-divisor)
+          (else (find-divisor n (+ test-divisor 1)))))
+  (define (divides? a b)
+    (= (remainder b a)0))
+  (if (= (smallest-divisor n) n)(display "yes")(display"no")))
+###################################### 简单素性检测 ##################################
+======================================================================================
+(define (add-rat x y)
+  (make-rat (+(*(numer x)(denom y))
+              (*(denom x)(numer y)))
+            (* (denom x)(denom y))))
+(define (sub-rat x y)
+  (make-rat (-(*(numer x)(denom y))
+              (*(denom x)(numer y)))
+            (* (denom x)(denom y))))
+(define (mul-rat x y)
+  (make-rat (*(numer x)(numer y))
+            (*(denom y)(denom x))))
+(define (div-rat x y)
+  (make-rat (*(numer x)(denom y))
+            (*(denom x)(numer y))))
+(define (equal-rat? x y)
+  (= (*(numer x)(denom y))(*(denom x)(numer y))))
+(define (make-rat n d)(cons n d))
+(define (numer x)(car x))
+(define (denom x)(cdr x))
+(define (print-rat x)
+    (newline)
+    (display (numer x))
+    (display "/")
+    (display (denom x)))
+======================================================================================
+(define a (list 1 2 3 4))    //定义a是一个列表
+(car a)
+》1
+(cdr a)
+》'(2 3 4)
+(cons 6 a)                   //a并没有改变
+（define b （cons 5 a））    //b=（5，1，2，3，4），a=（1，2，3，4）
+======================================================================================
+(define a (list 1 2 3 4 5 6 7))
+(define (list-ref list n)                 //取元素函数，如果要取list中的第k位，n取
+  (if (= n 0) (car list)                  //（k-1）
+      (list-ref (cdr list) (- n 1))))
+(define (length list)                     //求长度函数
+  (if (null? list)
+      0
+      (+ 1 (length (cdr list)))))
+(define (len list)                        //求长度函数（迭代版本）
+  (define (f list n)
+    (if (null? list)
+        n
+        (f (cdr list) (+ n 1))))
+  (f list 0)
+  )
+(define (append a b)                      //把b贴到a后面，实际上，a和b都没变
+  (if (null? a)
+      b
+      (cons (car a)(append (cdr a) b))))
+(define (last-pair list)                  //返回最后一个元素
+  (if (null? (cdr list))
+      (car list)
+      (last-pair (cdr list))))
+(define (count-leaves x)
+  (cond ((null? x)0)
+        ((not (pair? x))1)
+        (else (+ (count-leaves (car x))(count-leaves (cdr x))))))
+(define (reverse list)
+  (define (f nu li)
+    (if (null? li)
+        nu
+        (f (cons (car li) nu) (cdr li))))
+    (f null list))
+======================================================================================
+(define (map pro list)
+  (if (null? list)
+      null
+      (cons (pro (car list))
+            (map pro (cdr list)))))
+======================================================================================
+(lambda (x y) (+ x y))
+//just think as an op or a function without name 

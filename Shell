@@ -1,0 +1,170 @@
+Linux 系统指令
+	shutdown [OPTION]... TIME [MESSAGE]
+		-r 				重启
+		-k				送警告信号
+		-h 				关机后关电源
+	cd
+		.表示本目录下 ..表示上级目录
+	pwd 				显示绝对路径
+	mkdir [OPTION]..  DIRECTORY... 
+		-p 加路径的话,可以递归地创建路径上的所有文件
+
+正则表达式:
+	.(点号)  匹配任意单字符, a.b <=> acb or adb
+	*		 匹配匹配在它之前的任意数目的单字符, a*b <=> b or ab or aab
+	+
+	?		 0或1次
+	^		 匹配以此开头的行, ^too <=> too many people
+	$ 		 匹配以此结尾的行, too$ <=> I think too
+	[Tt]oo   匹配Too和too
+	[^Tt]	 匹配不含Tt的
+
+第一讲:
+	示范1 uad.sh:
+	#!/bin/bash
+	#time
+	echo "creating user..."
+	useradd zhangsan
+	echo "setup password..."
+	echo 123456 | passwd --stdin zhangsan
+	echo "done"
+
+	调用脚本的方式:
+	1(最标准的,第一行赋给脚本执行权限)
+	chmod +x uad.sh
+	./uad.sh
+	2
+	sh uad.sh
+	3
+	source uad.sh
+
+第二讲:Shell命令的组合运用:管道操作,重定向操作和逻辑分割
+	管道操作
+	将一端的命令输出交给另一端的命令处理
+	格式: 命令1 | 命令2
+	示范:
+	求文件名满足要求的个数
+	find /etc -name "*.conf" -type f | wc -l
+	ps aux是列出所有进程信息
+	ps aux | gerp httpd
+	
+	重定向操作:改变执行命令时的默认输入输出
+	重定向输入    <    从指定文件读取数据
+	重定向输出   >,>>  前者是覆盖文件,后者是追加模式
+	标准错误输出 2>,2>> 将错误信息重定向    
+	混合输出    &>,&>> 不区分是否是正常输出还是错误输出
+	示范:
+	把当前版本信息保存到version.txt
+	uname -r > version.txt
+	下面这条会产生错误信息,因为version2.txt不存在
+	cat version.txt version2.txt 2> errot.txt
+
+	逻辑分割 '&&','||',';'(顺序执行)
+	示范:
+	创建成功打印secceed,失败没有返回
+	mkdir /mulu/a 2>/dev/null && echo "succeed"
+
+第三讲 使用变量
+	定义变量 格式: 变量名=变量值
+	引用变量 格式: $变量名或者${变量名}
+	双引号,允许引用和转义;单引号禁止引用和转义
+	'`'
+	示范:
+	test="apple"
+	echo "$test"
+	echo '$test'
+	把命令返回的结果赋给变量
+	Ver = `uname -r`
+
+	环境变量
+	命令env显示当前环境变量的信息
+	用户可控的:PATH,LANG(zh_CN.是中文;en_US.英文),CLASSPATH
+	特殊变量
+	$?:前一条命令的状态值,0为正常,非0为异常
+	$0:脚本自身程序名
+	$1-$9:第一-第九位位置参数(执行脚本时附带的参数)
+	$*:命令行的所有位置参数的内容
+	$#:命令行的位置参数个数
+	示范:
+	#!/bin/bash
+	echo "this program's name : $0"
+	echo "the number of the parameters $#"
+	echo "the first parameter is $1"
+	echo "all the parameters:$*"
+
+第四讲 数值运算
+	expr 数值1 操作符 数值2 
+	$[数值1 操作符 数值2]
+	包括 +-*/%   使用乘号时...1 \* 2...因为*是特定字符...第二种方式不用注意
+	let 变量名++,let 变量名--
+	let x++ 
+	let x+=2
+	echo $RANDOM 
+	seq 末数 默认从1开始
+	seq 首数 末数
+	seq 首数 增量 末数
+
+	使用更高端的计算器..echo "1+2" | bc;echo "scale=4;10/3" | bc 限制输出位数为4
+
+第五讲 字符串
+	路径分割 dirname命令(定位目标所在文件夹),basename命令(文件名)
+	expr substr $Var 起始位置 截取长度(起始位置标号为1)
+	${Var:起始位置:截取长度}(起始位置标号为0)
+	示范:
+	#Var = "/ect/httpd/cof/httpd.conf"
+	#dirname $Var
+	/etc/httpd/conf
+	#basename $Var
+	httpd.conf
+	#Var=BeiDaQingNiao
+	#expr sbustr $Var 4 6
+	DaQing
+
+	字符串替换
+	格式: ${Var/old/new} 替换起一个old串
+	 ${Var//old/new} 替换所有old
+
+第六讲 条件测试
+	格式1: test 条件表达式
+	格式2: [条件表达式]
+	-e:目标是否存在
+	-d:是否为目录
+	-f:是否是文件
+	-r:是否可读
+	-w:是否可写
+	-x:是否可执行
+	整数值比较:
+	-eq:=
+	-ne:!=
+	-gt:>
+	-lt:<
+	-ge:>=
+	-le:<=
+	字符串直接用=和!=判断
+	[-d "/ect/grub"]
+
+第七讲 if语句
+	if 条件测试
+	then 命令序列
+	elif 命令序列
+	else 命令序列
+	fi
+
+第八讲 for语句
+	for 变量名 in 取值列表
+	do
+		命令序列
+	done
+
+第九讲 awk文本处理工具
+	awk '模式{操作}' 文件1 文件2...
+	模式可以是 '/正则表达式/'
+	awk 'NR==1 {print}' /etc/hosts 把该文件第一行输出
+	NR叫做内置变量其他常用的还有
+	FS 指定分割的标准,缺省为空格
+	$n 当前行的第几个字段 0表示全部
+	awk 'NR==1,NR==3 {print}' /etc/hosts 1到3行
+	awk 'NR==1||NR==3 {print}' /etc/hosts 1和3行
+
+第十讲 sed文本处理工具,替换文本内容比较方便
+	sed [-n 不显示修改后的结果 ]'编辑指令' 文件1 文件2 ...

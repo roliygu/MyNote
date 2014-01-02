@@ -1,0 +1,30 @@
+回溯法:
+1) 一些关键的函数
+	Backtrack(t)
+		if t > n Output(x)
+		else
+			for(i = f(n,t);i<=g(n,t);i++)
+				//记录当前的分支,h(i)的取值在f(n,t)与g(n,t)之间或者是某种函数映射
+				x[t] = h(i)
+				if Constraint(t)&&Bound(t) Backtrack(t+1)
+	
+	IterativeBacktrack()
+	//迭代式回溯
+		t = 1
+		while t > 0
+			if f(n,t)<g(n,t)
+				for(i=f(n,t);i<=g(n,t);i++)
+					x[t] = h(i)
+					if Constraint(t)&&Bound(t)
+						if Solution(t) 
+							Output(x)
+						else t++
+			else t--
+
+	其中涉及到的:
+		Output(x):当已经搜索到解空间树的最底层的时候,用这个函数返回解的形式
+		f(n,t)和g(n,t):实际上被认为是解空间树每层的可选分支取值的上限和下限,整个for语句,就是在枚举每一个分支
+		Constraint(t)和Bound(t) 是两个很重要的剪枝函数
+		Constraint(t)是约束函数,Bound(t)是限界函数,Constraint(t)是必不可少的,Bound(t)是优化必不可少的(当然,也增加了额外的开销,取平衡最优)	
+		迭代式中相对多出来的Solutio(t),认为是在
+	

@@ -1,0 +1,291 @@
+
+%%表示取模
+help(mean)
+attributes(object)查看对象里的成员
+
+产生向量
+	x=c(1,2,3,4)
+	y=c("a","b","c")
+	z <- c(x,0,x)
+	a=c(1:10) 表示1到10,间隔是1
+	a=c(1:10*2) 表示1到10,但是每个元素*2,可为任意运算符
+		像 1:10*2 这样的用法很常见,也可以用于向量下标,即1-20间的偶数下标
+	a=letters[1:30]产生第一到30个字母的向量,26以后的NA代替
+	
+
+向量使用
+    length(x)
+    mean(x)求均值
+    sum(x)
+    max(x);min(x)
+    var(x)求方差
+    prod(x)连乘;
+    sd(x)标准差;
+    sort(x) 升序排序
+	mode(x) 查看向量类型
+	x*2 x中每个元素都乘2
+	x[3]下标从1开始
+	x[-3]				除了第3个的其他元素
+	x[1:5]				第一到第五个,共五个元素
+	x[-(1:5)]			除了第一到第五个
+	x[c(2,3,4)] 		x的第2,第3和第4个元素
+	x[x<20 & x>10] 		选出＜20的元素
+	tmp <- x>13    		返回逻辑向量
+		逻辑符号包括: < <= > >= == != & | !
+	如果向量中某项缺省,用NA表示.检测是否缺省,使用is.na(x)函数
+	seq(5,121,by=2)		从5到121间隔2的序列
+	seq(5,121,length=10)第一个元素是5,最后一个是121,总共有10个元素的等差序列
+	which.max(x)		返回x中最大元素的下标
+	which(x>5) 			x中大于5的元素的下标 
+	rev(x)反转x
+	paste("apple","banana",sep="") 将两个字符串拼接,不指定sep的话默认空格
+	a%o%b 	or outer(a,b,"*") 向量的外积
+	a%*%b 				向量的内积
+
+数组
+	数组生成
+		x=c(1:6)
+		dim(x)<-c(2,3)    把x做成2行3列的数组;也是矩阵
+		1 3 5
+		2 4 6
+	rbind(x,y)把行向量拼成矩阵
+	cbind(x,y)把列向量拼成矩阵
+	dim(x),nrow(x),ncol(x) 得到矩阵x的维数,行数,列数
+	x=c(1:12)
+	matrix(x,nrow=3,ncol=4)
+	1 4 7 10
+	2 5 8 11
+	3 6 9 12
+	matrix(x,nrow=4,ncol=3)
+	1 5 9
+	2 6 10
+	3 7 11
+	4 8 12
+	matrix(x,nrow=4,ncol=3,byrow=T)
+	1   2   3
+	4   5   6
+	7   8   9
+	10  11  12
+	x=array(1:20, dim=c(4,5))          矩阵生成式,[dim=]可以不加
+	1  5  9  13 17
+	2  6  10 14 18
+	3  7  11 15 19
+	4  8  12 16 20
+	i<-array(c(1:3,1:3),dim=c(3,2))    行数只是要选定的点数,列对应的是纬度
+	1 1
+	2 2
+	3 3
+	x[i] 					表示选出x中坐标为(1,1),(2,2),(3,3)的元素
+	x[i]<-0                 对其赋新值
+	数组的使用
+		a是一个3维数组
+		a[2,,]   			表示第一维为2,其他维取遍全部数
+
+矩阵(作为二维数组的特例)
+	t(x)					矩阵的转置
+	a * b 					对应元素的乘积,操作符可换
+	a%*%b 					矩阵乘
+	diag(x) 				求方阵的对角线元素,x是方阵的时候
+							;x是向量的时候,生成的是对角线矩阵
+							;x是单值时,生成的是x阶的单位矩阵
+	solve(x)				求x的逆矩阵
+	solve(A,b)				求A*x=b的解
+	eigen(x)求x的特征值
+	det(x)				  求x的行列式值
+	
+
+	
+
+数据框
+	x=c(1,2,3,4)
+	y=c(5,6,7,8)
+	z=data.frame('变量1'=x,'变量2'=y)   z就是数据框类型;x和y的长度要相等
+	    变量1    变量2
+	1   1        5
+	2   2        6
+	3   3        7
+	4   4        8
+	colMeans(z)
+	apply(z,2,mean) 第二个参数是纬度,1表示行,2表示列;
+	第三个参数是对向量可用的函数
+	apply(z,2,max) 
+	which.max(apply(x(c("x1","x2","x3")),1,sum))
+	数据引用:df为数据框
+	df[1:2,3:5]  返回df 的1到2行,3到5列
+	df$Weight    返回df 的Weight列
+	编辑少量数据框数据的时候使用
+	edit(x)函数,或者像
+	edit(data.frame())来新建数据框,手动填入数据
+
+	
+
+读取文本文件数据
+	y<-read.table("[路径:c://..]abc.txt")  
+	write.table(x,file="路径",col.names=F,row.names=F,sep=" ")
+
+读excel文件,把其文件存为以空格分割的prn文本
+    或者安装RODBC包,以后,
+    library(RODBC)
+    z<-odbcConnectExcel("test.xls")
+
+for循环 
+	for (i in 1:59){a[i]=i*2+3}
+	while{条件}{指令}
+
+函数
+	name<-function(x1,x2[,x3=3]){
+		xxxxxxx;xxxxxxx				同行多语句用分号分开
+		xxxxxxx						或者直接换行
+		t 							最后一行是要返回的值
+	}
+	可以定义嵌套函数
+	操作重载
+	"%anything%"<-function(x,y){}   只需要"x%anything%y"就可以使用函数
+运行r脚本
+	print(x)
+	控制台里用 source("D:\\h.r")
+
+	runif(100,min=80,max=100)产生值为80到1oo之间的100个随机数,结果是浮点数向量
+	rnorm(16[,mean=1,sd=3])按照正态分布产生16个随机数
+	round(x) x是浮点数向量,做四舍五入,做成int向量
+
+绘图
+	book: <R Graphs Cookbook>
+	par()设置绘图默认参数,具体参考help,此命令比较复杂
+	colores() 查看可使用的颜色列表
+	plot(z) 散点图 polt(x$x1,x$x2)
+	plot(x1,x2,main="xxx",xlab="yyy",ylab="zzz",xlim=c(0,100),ylim=c(0,100)
+		col="rad",pch=19)
+	pch19表示圆盘,
+	plot(x1,x2,type="l"[,lwd=2]) 连线图,lwd是线宽
+	plot(density(x1)) 密度图
+
+	hist(x$x1) x是数据框,x1是其中的一列
+	barplot(table(x$x1)) 柱状图
+	sunflowerplot(iris[,3:4],col="gold",seg.col="gold")向日葵散点图,
+	        在数据重叠的地方用向日葵的花瓣数目来表示重叠数据的个数
+	pairs(iris[,1:4])第二个参数选定了列数,同时每两列绘制一张图
+	pie(table(x$x1)) 饼图
+	boxplot(x1,x2,x3) 箱尾图
+	stars(x[c("x1","x2","x3")]) 星像图
+	faces(x[c("x1","x2","x3")]) 脸谱图 需要安装aplpack包
+	stem(x1) 茎叶图
+	qqnorm(x1),qqline(x1)点的散步越接近直线则越接近正态分布
+
+分布函数
+	rnorm(n,mean=0,sd=1)
+	rexp(n,rate=1)            指数分布
+	rgamma(n, shape, scale=1) gamma分布
+	rpois(n, lambda)          泊松分布
+	rweibull(n, shape, scale=1)
+	ecauchy(n,location=0, scale=1)
+	rbeta(n, shape1, shape2)  beta分布
+	rt(n, df)                 t分布
+	rf(n, df1, df2)           F分布
+	rchisq(n,df)              卡方分布
+	rbinom(n, size, prob)     二项
+	rgeom(n, prob)            几何
+	rhyper(nn,m,n,k)          超几何
+	rlogis(n,location=0,scale=1)  logistic分布
+	rlnorm(n,meanlog=0,sdlog=1) 对数正态
+	rnbinom(n,size,prob)       负二项分布
+	runif(n,min=0,mxa=1)       均匀分布
+	rwilcox(nn,m,n)
+
+数字特征
+	mean(x)
+	sd(x)
+	sort(x)
+	var(x)
+	median(x)    中位数
+	fivenum()    五数总扩
+	quantile(x, probs = seq(0, 1, 0.25), na.rm = FALSE
+		,names = TRUE, type = 7, ...)           分位数
+	cov(x1,x2)   协方差矩阵
+	cor(x1,x2)   相关系数矩阵
+
+一元线性回归
+	> lxy<-
+	+ function(x,y){n=length(x);sum(x*y)-sum(x)*sum(y)/n}
+	> b=lxy(h,w)/lxy(h,h)
+	> a=mean(w)-b*mean(h)
+	> lines(h,a+b*h)
+	自带函数的解法
+	y~1+x or y~x 不过原点的模型
+	y~x-1 or y~x+0 or y~0+x   过原点的模型,详细见help(formula)
+	> a=lm(w~1+h)
+	> a
+
+	Call:
+	lm(formula = w ~ 1 + h)
+
+	Coefficients:
+	(Intercept)            h  
+   		-140.364        1.159  
+   	summary(a)查看详细信息,三个指标查看合理程度:
+   		Pr的值越小表示结果越可信,大于0.05就不合理了
+   		,多元时候如果某列这样则应该去掉这列
+   		后面的星数越多越合理;
+   		R-squared越接近1,越合理
+   	z=data.frame(x=185)
+   	predict(a,z)   也可以直接计算
+多元线性回归:
+	d=data.frame(x1=c(1,2,3,4),x2=c(1,2,3,4),y=c(2,4,6,8))是多列数据的数据框,
+	s=lm(y ~ x1+x2,data=d)
+	或者
+	s=lm(Fertility ~.,data=d) '.'表示除了因变量之外的所有变量
+	s=update(lm.sol, .~. *I(x1^2)) 表示多增加一个二次修正项,其他项不变
+	s=update(lm.sol, .~. -x1)
+	使用sl=step(s,direction="backward")修改模型:
+	会显示修改使最优的过程,这个函数实际上就是在判断当前
+	状态下去掉某个项之后AIC的变化情况,能使之减小的被认为是应该被减去的项
+	也可以使用drop1(s)函数来手动查看删减某项后的优化情况,对应还有add1(s)
+	查看可以增加的项(已经是全集的时候没用)
+	修改以后的模型,Residual standard error值变的越小越好
+
+回归诊断:
+	shapire.test(x)检测x是否是正态分布p-value越接近0越应该拒绝
+	残差 
+	residuals(x)计算残差
+
+	z<-lm(iris$Sepal.Length ~ iris$Sepal.Width)
+	plot(z)
+	之后显示的第一张图叫残差图(残差图像平行线比较合理),之后还能看到三张图,具体意义不明....
+
+多重共线性:
+	比如某列的值其实是其他列的线性组合,那样的话,这列是无意义的;
+	最直接的方式,详细意义参考相关书籍:
+	发现多重共线性:
+	kappa值,＜100不存在不存在多重共线性;>1000存在多重共线性
+
+广义线性模型:
+非线性回归:
+	
+	
+
+
+
+
+network = z$计算机网络
+network=network[4:196]
+network=network[1:191]
+write.table(network,file="g://ou.txt",col.names=F,row.names=F,sep=" ")
+new_network<-read.table("g://ounew.txt")
+nn=new_network[,1]
+
+
+感知器算法
+old_data是x和y的混合数据
+x=as.matrix(cbind(1,old_data[,1:length(old_data)-1]))   得到第一列为0的x的矩阵
+y=as.matrix(old_data[length(old_data)])				 得到y的列向量
+w=matrix(0,nrow=ncol(x),ncol=1)
+
+> check <- function(x,y,w){
++ z=t(x)%*%w*y
++ num=which(z<=0)
++ if(length(num)==0) t=0 else t=num[1]
++ t}
+> while(tem!=0){
++ w=w+(x[tem,]*y[tem,])
++ tem=check(x,y,w)
++ }

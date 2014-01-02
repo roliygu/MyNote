@@ -1,0 +1,104 @@
+Python
+服务器端选择一个大于1024的端口,客户端的端口是由OS随机挑选的
+
+建立socket时需要两个参数,通信类型和协议家族
+	通信类型一般是 AF_INET 即IPv4
+	协议家族包括 TCP的SOCK_STREAM和UDP的SOCK_DGRAM
+	e.g.
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+连接需要一个元组对象,包括IP地址/网址和端口号
+	e.g.
+	s.connect(("www.baidu.com",80))
+
+socket.getservbyname('http', 'tcp') #通过这个函数查看各个协议对应的端口号
+当你建立好一个连接后,可以使用:
+	s.getsockname()				#查看本身的IP和端口号
+	s.getpeername()				#连接对方的IP和端口号
+
+服务器端
+
+host = ''
+port = 51423
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#Reuseaddr 设置为1 确保程序结束后本端口立即被释放
+#s.setsocketopt(level, optname, value)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+s.bind((host,port))
+#数字表示允许的未连接等待请求
+s.listen(1)
+
+while 1:
+	clientsock
+
+C语言版
+	客户端:
+		1.使用socket()创建TCP套接字
+		2.使用connect()建立到达服务器的连接
+		3.使用send()和recv()通信
+		4.使用close()关闭连接
+	服务器端:
+		1.使用socket()创建TCP套接字
+		2.利用bind()给套接字分配端口
+		3.使用listen()告诉操作系统允许对该端口建立连接
+		4.反复执行:
+			accept()接受新的客户端的connect()请求
+			send()和recv()与客户通信
+			使用close()关闭连接
+	int socket(int domain, int type, int protocol)
+		第一个参数确定套接字通信领域:AF_INET(IPv4)或者AF_INET6(IPV6)
+		第二个参数指明套接字类型:SOCK_STREAM(数据流),SOCK_DGRAM(数据报)
+		第三个参数指明协议类型:IPPROTO_TCP,IPPROTO_UDP;0默认是TCP
+		函数返回值,正常时是非负值,认为是套接字描述符,-1表示失败
+	int connect(int socket, const struct sockaddr *foreignAddress,
+				 socklen_t addressLength)
+		第一个参数略
+		第二个参数是将用户的地址结构体转换成接口通用的形式
+		第三个参数是用户地址结构体的大小,用sizeof()得到的结果
+		函数成功时也会对第一个参数代表的套接字做处理,也就是说,之后就可以通过这个套接字与服务器端通信
+	涉及到的地址结构体:
+		struct sockaddr_in{
+			sa_family_t sin_family;
+			in_port_t sin_port;
+			struct in_addr sin_addr;
+			char sin_zero[8];
+		};//IPV4的地址结构体
+		struct in_addr{
+			uint32_t s_addr;
+		};
+		sin_family 必须指明是AF_INET
+		sin_port 用htons(servPort)函数来设定
+		sin_addr.s_addr用 inet_pton()函数来指定 
+			int inet_pton(int addressFamily, const char *src, void *dst)
+				第一个参数是AF_INET
+				第二个参数是IP地址
+				第三个参数是目标的指针
+			函数用来把字符串型的IP地址转换成数字,并赋给dst指向的对象.返回1表示成功,0表示src格式非法,-1表示第一个参数设定非法
+			const char *inet_ntop(int addressFamily, const void *src,char *dst, 
+									socklen_t dstBytes)
+				第二个参数指向要转换的数字地址内存块的第一个字节
+				第三个参数是转换之后的结果
+				第四个参数由 sizeof(dst)设定
+			成功则返回src指针,否则返回NULL指针
+	int bind(int socket, struct sockaddr *localAddress, socklen_t addressSize)
+		第二个参数是sockaddr_in结构体,作为服务器端的sockaddr_in特殊之处是用htonl(INADDR_ANY)来设定其地址.某种情况下,一台主句具有多个IP地址,如果不是使用的INADDR_ANY的方式,而是类似客户端inet_pton()方式,则指明服务器程序只接受以该特定IP地址为目标的客户端请求
+		成功返回0,失败返回-1
+	int listen(int socket, int queueLimit)
+		第二个参数指定了等待连接的数量上限
+		执行了这个函数之后服务器程序开始维护一个请求连接的队列
+	int accept(int socket, struct sockaddr *clientAddress, 
+				socklen_t *addressLength)
+		若连接队列为空(说明还没有客户端程序请求服务),此函数使服务器端程序阻塞;若队列不为空,此函数将队列中第一个请求出队,并将其信息(客户端IP,端口等)填充到clientAddress这个结构体中;函数执行成功会返回一个客户端套接字的标识符
+		服务器端通过这个标识符与客户端通信
+	ssize_t send(int socket, const void *msg, size_t msgLength, int flags)
+	ssize_t recv(int socket, void *rcvBuffer, size_t bufferLength, int flages)
+		第一个参数取决于是服务器端还是客户端程序,服务器端程序第一个参数来自accept()函数,客户端程序的一个参数来自connect()函数
+		flages一般设为0
+	int close(int socket)
+		参数就是socket描述符,成功关闭返回0,否则-1
+	
+	int getaddrinfo (const char *hostStr, const char *serviceStr, 
+					 const struct addrinfo *hints, struct **results)
+		sys/types.h+sys/socket.h+netdb.h
+		函数将根据hostStr和serviceStr返回对应的IP地址和端口号,即用于把网址-服务翻译成IP-端口的函数.返回的结果用results指向,返回的是一个链表.

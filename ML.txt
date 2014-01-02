@@ -1,0 +1,208 @@
+val z = if bool then t else t
+then 和else必须成对出现，t可以是任意类型
+val y = 0-2    or
+val y = ~2
+int/int 要写作 int div int 
+real/real 就可以直接这样写
+大概是因为ML没有类型转换，/的结果是real，然而用int就type cheacking 错误
+functions:
+fun pow (x : int, y : int)=
+    if y = 0
+    then 1
+    else x * pow(x,y-1)
+pairs(2-tuples):
+	Suntax: (e1,e2)
+	e1's type is t1,e2's type is t2; t1 is not need to be same as t2
+	and the (e1,e2)'s type is t1*t2, be a new kind of type;
+	and:
+	"#1 e":return the first part of the pair e;
+	"#2 e":return the second part of the pair e;
+list:
+	[]
+		empty list has the type called "alpha",after inserting an element into
+	the empty list ,the list's type changes to the type of the element
+	[v1,v2,v3,v4]
+	e1::L
+		insert e1 into L ,and e1 locoticed at the first 
+		in fact , the L isn't being changed,just need  L = e1::L
+	e1's type is same as the type of the element which belongs to the list
+	null
+		null is a function which is used to test one list is wether empty;
+	hd e
+		return the first element of the list ;type_of(hd e) is type_of(e'element)
+	tl e
+		return a list ;the list is [e2,e3,e4,...]
+	e which is from "hd e" and "tl e" can not be empty list;
+	x @ y
+		x and y are two lists,this operator is list-append operator
+library function Int.toString() for converting an int to a string
+string
+	x^y
+		val x="aaa",val y="ccc",x^y="aaaccc"
+let-expressions
+	Syntax: 
+		let 
+		b1 b2...bn 
+		in
+		e
+		end
+	the whole let-expression is an expression(or the expression's value) which is between 'in' and 'end',and all the expression's value have been binded in the segment starting 'let' to 'in';
+options:
+	t option is a type for any type t -(much like t list, but a different type,not a list)
+	buliding:
+		NONE has type 'a option (much like [] has type 'a list)
+		SOME e has type t option if e has type t (much like e :: [])
+	Accessing:
+		isSome has type 'a option->bool
+		valOf has type 'a option -> 'a (exception if given NONE)
+		some explantion:
+			why we use Option in this function(max)? 
+			that is because the normal function returns the rusult with different types(look at the good_max(),it returns the types of int,empty list,and list)sometimes the function has to return only one type to fit to the upper function's interface,and by using the Option ,the function only return the type(that is Option),then we can ues it conveniently and design the interface easily 
+boolean operation and comparison:
+	e1 andalso e2
+	e1 orelse e2
+	not e1
+	=,<>,>,<.>=,<=
+	do not use = and <> between two real numbers
+Record:
+	-val x = {bar=1,foo=1+2,baz=true}
+	val x = {bar=1,baz=true,foo=3}
+	  :{bar:int,baz:bool,foo:int}
+	-#bar x;
+	val it = 1 : int
+	tuple syntax is just a different way to write certain records
+	(e1,...,en) is another way of writing {1=e1,...,n=en}
+	tuples are just syntactic sugar for records with fields named 1,2,...,n
+Datatype binding:
+	Add a new type mytype to the environment
+	datatype mytype = TwoInts of int * int
+					 | Str of string
+					 | Pizza 
+	TwoInts : int * int -> mytype
+	Str : string -> mytype
+	Pizza : mytype
+	What we use are "TwoInts","Str" and "Pizza" instead of "mytype"!!! that is to say ,we can :
+		val a = Str "hi";
+		val b = TwoInts (3,7);
+		rather than :
+		val a = mytype "hi";
+		...
+	maybe we can think datatype binding as a function : it receives the original types(Str recieves the int * int),then retuens the new type -- mytype
+Case Expression:
+	case e of 
+		p1 => r1
+	  | p2 => r2
+	  | p3 => r3
+	  | _  => r4
+	  (* _ receives all pattern and _ is better in the end of the case*)
+	in sometime we can use triple or record instead of e,and it work rightly as well,and there are some syntactic sugar in these:
+		case triple of (x,y,z) => x+y+z
+	or  case r of {first=x.middle=y,last=z} => x+y+z
+	we pattern check the e ,if e's patten fit on p1,then r1;if e's patten suit to p2,then r2;if ......
+why we use Datatype binding and Case Expression?
+    in my opinion, Datetype binding mixs these different types into a new type,it provides the function an interface(just thinking about what we do in cpp for rewritint the function with different parameters' types);And the Case Expression provides the function an interface for returning a same result's type. 
+Int.max()
+Type Synonyms:
+	type aname = t 
+	val a : aname = xxx;
+	example:
+		type newtype = int * bool;
+		the three are in common:
+		val a : newtype = (1,true);
+		val b : int * bool = (1,true);
+		val c = (1,true);
+one function is : 
+fun sum_list xs = 
+	case xs of 
+		[] => 0
+	  | x::xs' => x + sum_list xs'
+we can use this faction in this way :sum_list([1,2,3]),when the list is not empty ,the case expression can only chooses the case x::xs' ,and makes [1,2,3] into 1::[2,3].of course,we can use this faction in sum_list(1::[2,3])
+	Pattern a::b::c::d matches all lists with >= 3 elements
+	Pattern a::b::c::[] matches all lists with 3 elements
+	Pattern ((a,b),(c,d))::e matches all non-empty list of pairs of pairs
+polymorphic datatypes:
+	datatype 'a option = NONE | SOME 'a
+pattern can be used in more actions
+	val (x,y,z) = (1,2,3)(*then*)
+	x = 1;y = 2;z = 3;
+	and so on :
+	val {first=x,middle=y,last=z} = {first=1,middle=2,last=3}(*then*)
+	x=1;y=2;z=3;
+	and so on:
+	fun sum_triple (x,y,z) = x + y +z
+	we can ask why this funciton is not the function with three arguments x and y and z but the function with one triple(x,y,z) argument?in fact ,all the functions in ML,only takes one argument... 
+	fun full_name{first=x,middle=y,last=z} = x + y + z
+	This function argument can be a pattern and not just a variable
+	in general :
+	fun f x = 
+		case x of 
+			p1 => e1
+		  | P2 => e2
+		  ...
+	can be written as 
+	fun f p1 = e1
+	  | f p2 = e2
+	  ...
+
+fun swap(x,y)=(y,x);
+(*int * 'a * int -> int*)
+fun partial_sum (x, y, z) = x + z 
+because we don't use y ,the typecheck will not check y's type.so we can use andything instead of y in this function.
+exception
+	An exception binding introduces a new kind of exception
+		exception MyFirstException
+		exception MysecondException of int * int
+	The 'raise' (throws) an exception
+		raise MyFirstException
+		raise (MySecondException(7,9))
+	A handle expression can catch an exception
+		e1 handle MyFirstException => e2
+		e1 handle MySecondException(x,y) => e2
+		that is to say : 
+		if e1(e1 can be anything which can raises this exception)  then make the exception returns e2
+
+First-class and higher functions
+	just the simplest functions(i think..)and so on:
+	fun double x = x*2
+	fun incr x = x+1
+	these functions can be everywhere values appeared;and if any part is this function in fact (such as val a =(double,3))then this part can be used as this funciton just like (#1 a) 10.
+	First-calss function be used as an argument for the higher-function 
+	function type:
+	we judge the arguments' and result's types by these arguments' option(such as ,if there x+1 or compare to int,we can know x's type is int),if the argument is not being used in the function's body this type is a'..
+Anonymous function
+	we can make the "first function" into a anonymous function just like this:
+		fun double x = x * 2 (*first function*)
+		fn x => x * 2         (*anonymous function*)
+	what is the differce?
+	in fact we need binding the fun before using it just like
+	"let fun double x = x * 2 in xxxx end ",but we can use "fn x => x * 2" anywhere function could be without binding it!
+	As we know ,anonymous function can not use for a recursive function!
+t1 -> t2 -> t3 -> t4 means t1 -> (t2 -> (t3 -> t4))
+List.rev 
+Lexical scope:
+	a function value has two parts:
+		the code(obviously)
+		the environment that was current when the function was defined(for example ,there are some arguments ,some of they come from the function's arguments,but other come from the outer environment whose values are being fixed as the function's definish ,and those values can not be changed antmore in the function body)
+fold is an iterator over recursive structure
+	fold(f,acc,[x1,x2,x3,x4])computes
+	f(f(f(f(acc,x1),x2),x3),x4)
+combine functions
+	val sqrt_of_abs = Math.sqrt o Real.fromInt o abs
+	it is "right to left"
+currying multiple-arguments and tupling
+	1.fun sorted_tupled (x,y,z) = z>= y andalso y>=x
+	2.val sorted3 = fn x => fn y => fn z => z >= y andalso y>=x
+	the two way return the same result,but they are different in using
+	the right way :
+	sorted_tupled(x,y,z) and sorted3 x y z 
+	and we can use carry() and uncarry() to make the two function into same totally.
+	fun carry f x y = f(x,y)
+	fun uncarry f(x,y) = f x y
+	then 
+	"sorted3" is same as "carry sorted3_tupled" totally
+	"uncarry sorted3" is same as "sorted3_tupled" totally 
+reference
+	t ref where t is a type
+	"ref e" to create a reference with initial contents e
+	e1 := e2 to update contents
+	!e to retrieve contents 
