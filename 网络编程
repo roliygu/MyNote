@@ -95,6 +95,10 @@ C语言版
 	ssize_t recv(int socket, void *rcvBuffer, size_t bufferLength, int flages)
 		第一个参数取决于是服务器端还是客户端程序,服务器端程序第一个参数来自accept()函数,客户端程序的一个参数来自connect()函数
 		flages一般设为0
+	ssize_t sendto(int socket, const void *msg, size_t msgLength, int flages,
+					const struct sockaddr *destAddr, socklen_t addrLen)
+	ssize_t recvfrom(int socket, void *msg, size_t msgLength, int flags,
+					struct sockaddr *srcAddr, socklen_t *addrLen)
 	int close(int socket)
 		参数就是socket描述符,成功关闭返回0,否则-1
 	
