@@ -1,0 +1,35 @@
+string
+	s串的每个单词首字母大写
+		string.capwords(s)            
+	以leet做字典,替换串中字符
+		leet = string.maketrans('abc','123')
+		'abcdadbdc'.translate(leet)   
+	以leet做字典,替换串中字符串2
+		leet = {'Username':'Roliy','Number':2011}
+		t = string.Template{"""
+		Username        :$Username
+		Number          :$Number
+		"""}
+		t.substitute(leet)
+	以leet做字典,替换串中字符串3
+		leet = {'Username':'Roliy','Number':2011}
+		s = """
+		Username        :%Username
+		Number          :%Number
+		%Username's number is %Number.
+		"""
+		print s % values
+	以leet做字典,使用自定义的Template方式
+		leet = {'User_name':'Roliy','Number':2011}
+		s = """
+		Username        :%User_name
+		Number          :%Number
+		%User_name's number is %Number.
+		"""
+		class MyTemplate(string.Template):
+			delimiter = '%'   				#以'%'代替'$'符
+			idpattern = '[a-z]+_[a-z]+'		#新制定的正则匹配方法,这里的规则要求key值必须含'_'符号才匹配:这里的User_name匹配,Number不匹配
+		t = MyTemplate(s)
+		print t.safe_substitute(leet)
+
+

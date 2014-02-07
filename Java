@@ -1,0 +1,193 @@
+Java
+	int 4字节
+	char 2字节
+	静态变量:
+		static定义于类中,此类新建的所有对象都共享这个变量;对应的还有静态函数.
+		静态变量用静态函数来访问;静态函数不能访问非静态变量
+		静态函数是Public的
+	static{} 静态区域块,区域块内的代码只在创建第一个对象的时候执行/类定义的时候执行
+	只有private属性不被继承
+	子类方法覆盖父类,返回值,函数名,参数都必须相同;不能缩小父类方法的限制范围
+	多态指的是,父类的引用可以用子类的实例来创建
+		Animal a = new Cat()
+		a = new Dog()
+	当这个引用实际上是其子类时,调用a的方法时,若a的方法在子类中被重写过,则会自动选择调用对应子类的新方法
+	这样就可以引申出一种函数参数类型的使用技巧,给函数做参数的可以是父类的引用,这样该父类的所有子类都可以做此函数的参数,函数的使用范围扩大了
+	抽象类:
+		一些父类方法本来不具有实际作用,(实际上也是找不到实际作用,比如此类Animal,其方法为eat,则并不能确定其eat肉or素,eat是由子类来确定的),故这里将其定义为抽象类+抽象方法
+		抽象方法就可以不用写其函数体;而继承此抽象类的子类,就一定要重写这个抽象方法
+		抽象类不能被实例化
+		abstract class Animal
+		{
+			int data;
+			abstract public void crg();
+		}
+	接口:
+		interface看成是一系列方法的集合,每个使用这个接口的类,都要重写所有接口的方法
+		接口不能被实例化
+		接口的方法不能有方法体
+		一个类可以实现多个接口
+		接口中可以有变量,变量是隐式static的,final类型;把变量放到接口中,当全局变量使用,Usb.a
+		接口可以继承接口,不过被继承接口访法也必须要实现
+		interface Usb{
+			int a=1; //必须被初始化
+			public void start();
+			public void stop();
+		}
+		class Camera implements Usb{
+			public void start(){
+				xxxxxxx;
+			}
+			public void stop(){
+				xxxxxx;
+			}
+		}
+	字符串不能用==来判等,比较的是地址
+	a.equals(b)
+	常用的集合类
+		ArrayList  动态数组...
+		LinkedList 可以拓展成栈,队列的动态数组...
+		Vector 和 Stack....
+					Vector是同步的,ArrayList是异步的
+		HashMap 	key-value对(字典)...多线程可以同时操作;可以放进null
+		Hashtable   同步-线程安全;效率比HashMap低;只能单线程
+
+	泛型
+		ArryList<Dog> d = new ArryList<Dog>()
+		从ArryList取出元素就不用强制转换类型了
+		class Gen<T>{xxxx;}
+	反射机制:通过反射机制可以获得类的信息,例如内部属性和方法等
+	异常:
+		检查性异常
+			程序正确,但外在环境条件不满足(文件I/O,Socket连接等)
+			Java必须要处理这类异常
+		运行期异常
+			数组越界等
+		错误
+			程序本身无法解决的
+	处理异常:
+		try...catch
+		try{
+			会引发异常的代码段
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		对于多种异常
+		try{}
+		catch(异常1 e){}
+		catch(异常2 e2){}
+		finally{
+			//不管有没有异常都会执行;一般说,把需要关闭的资源关闭
+		}
+	方式2 throw
+		在方法名后面指明throw,这样在执行f就必须要处理异常
+		public void f() throws Exception{
+			xxxx; 		//引发异常的代码
+		}
+		try{
+			f()
+		}catch{}
+	GUI
+		AWT->swing->SWT->JFace
+		java.awt.*;
+		javax.swing.*;
+		布局管理器:流式,
+			边界-东南西北中方位来划分
+				this.add(btn1,BorderLatout.EAST);
+				this.add(btn2,BorderLatout.NORTH);
+				this.add(btn3,BorderLatout.SOUTH);
+				this.add(btn4,BorderLatout.CENTER);
+				this.add(btn5,BorderLatout.NORTH);
+			流式
+				this.add(btn1);
+				this.add(btn2);
+				this.add(btn3);
+				this.add(btn4);
+				this.add(btn5);
+				this.setLayout(new FlowLayout([FlowLayout.LEFT]));  //没有这句btn5覆盖前面的btn,左对齐
+				this.setResizeable(false)  //禁止修改窗口大小	
+			网格
+				this.setLayout(new GridLayout(2,2[,10,10])); //设置行列数,三四个参数设置间隔
+				this.add(btn1);
+				this.add(btn2);
+				this.add(btn3);
+				this.add(btn4);
+			面板组件-JPanel
+				将组件布局到JPanel上,然后用JPanel做高层布局
+				jp = new JPanel(); //默认流布局
+				jp.add(btn1);
+				jp.add(btn2);
+				this.add(jp,xxx)
+
+		GUI程序步骤
+			1.继承JFrame
+			2.定义需要的组件
+			3.创建组件
+			4.设置布局管理器
+			5.添加组件
+			6.显示窗体
+		常用组件
+			new JButton("Button")   	按钮
+			new JTextField(10) 			文本框,参数是长度
+			new JPasswordField(10)  	密码框
+			new JLable("Lable")  		标签
+				JLabel(new ImageIcon("image/ci"))   image是跟src同级的文件夹
+				JLabel("<html><a href='www.baidu.com'>百度</a>")
+			new JCheckBox("JCB") 		复选框
+			new JRadioButton("JRB1") 	单选框,一个选项对应的多个JRB要放到一个ButtonGroup中管理
+				ButtonGroup bg = new ButtonGroup()
+				bg.add(jrb)
+			new JComboBox(String []JCB) 下拉框
+			new JList(String []L) 		列表框,会全部列出来
+				JL.setVisibleRowCount(3)    滚动情况下,显示的个数
+				jsp = new JScrollPane(JL) 	滚动窗格
+				添加到布局的时候添加jsp即可
+			JTextArea 			多行文本框
+			JTabbedPane 		选项卡窗格
+		绘图
+			Component类提供了两个和绘图相关的重要方法
+				paint(Graphics g) 	绘制组件的外观
+					当组件第一次显示;窗口从最小化到最大化;窗口大小发生变化;repaint函数被调用
+					,这个函数都会被自动调用
+					一些需要掌握的绘制图形方法:
+						drawLine()
+						drawRect()      矩形
+						drawOval() 		椭圆
+						fillRect()
+						fillOval()
+						drawImage()
+						drawString()
+						setFont()
+						serColor()
+				repaint() 			刷新组件的外观
+		事件处理机制
+			实现监听的步骤
+				1.实现对应的接口[KeyListener,MouseListener,ActionListener,WindowListener]
+				2.把接口的处理方法根据需要重写(Override)
+				3.在事件源注册监听
+				4.事件传到对应的类,类做事件监听
+			事件源
+				产生/触发事件的对象(button等),一个事件源可能产生多个不同类型事件,能被多个监听者监听
+			事件
+				事件源向事件监听者传递信息的载体.java.awt.event和java.swing.event包中	
+			事件监听者
+				接受事件的类;
+			事件编程步骤
+				1.编写事件处理类
+				2.根据需求给事件处理类实现监听器接口
+				3.在事件处理类中重写其事件处理函数
+				4.在事件源类中指定给事件的监听器,即注册监听
+	线程
+		Runnable和线程继承两种方式
+		尽可能使用Runnable接口方式来创建线程
+		在使用Thread的时候只需要new一个实例出来,调用start()方法即可以启动一个线程
+			Thread test = new Thread();
+			test.start();
+		在使用Runnable的时候需要先new一个实现Runnable的实例,之后用Thread调用
+			Test impelements Runnable
+			Test t = new Test();
+			Thread test = new Thread(t);
+			test.start();
+		对象锁
+			synchronized(this){代码块}
+			将多个线程访问公共资源的代码块放到括号中,this指的是某个对象,也就是公共资源

@@ -1,0 +1,42 @@
+面向对象
+	属性
+		__name   以__开始的属性是私有属性
+		__dict__  内置属性,返回对象的属性-值和方法
+	方法
+		方法中新使用的属性如果不是self.var的话,var仅仅作为方法内的临时变量,且这样产生的属性必须是调用了该方法之后才产生的
+		__getname()  也是以__开头的是私有方法
+		静态方法相对要快一点,以下两种方式的目的都差不多,通过类(不创建实例)直接调用公有方法或属性
+		类中定义的方法f
+		def f():
+			xx
+		ff=classmethod(f)
+			被classmethod()函数处理过的函数能被类直接调用,也能被对象调用
+			staticmethod()函数处理过的函数成为静态方法
+		
+		第二种方式
+		装饰器声明类方法和静态方法
+			@classmethod
+			def f(self):
+				xxx
+
+			@staticmethod
+			def f():
+				xxx
+	内部类-类内部可以直接定义类
+		objectIn = classOut.classIn()
+		或者
+		objectOut = classOut()
+		objectIn = objectOut.classIn()
+	内置方法-魔术方法
+		__str__(self)   print 一个object是触发的方法,默认是返回object的内存地址
+		__init__()
+		__del__() 		析构方法
+		__getitem__()   获取序列的索引key所对应的值
+		__len__() 
+		__cmp__(src,dst)
+
+	继承
+		class MyClass(ParentClass[,otherClass]): #多个父类有交叉属性时,以先继承的为主
+			pass 		完全继承...
+
+
