@@ -32,4 +32,11 @@ string
 		t = MyTemplate(s)
 		print t.safe_substitute(leet)
 
-
+time
+	time.time()     返回从某点到现在的秒数
+	time.ctime()--->"Sat Feb 08 16:39:13 2014" 		当前时间的一个字符串
+	time.ctime(time.time()+15) 				当前时间15s后的时间
+	time.clock() 		自身程序占用cpu的时间,出于sleep状态不计时
+	time.gmtime() 		返回当前时间的一个结构体,可通过其属性来查看具体,但是默认非中国时区
+	datetime.time(1, 2, 3)    创建一个01:02:03的时间对象
+	datetime.date.today()     2014-02-08

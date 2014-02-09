@@ -1,0 +1,42 @@
+网络攻防
+	攻击身份和位置隐藏
+		IP地址欺骗或盗用
+		自由代理服务器
+		MAC地址盗用
+			更改注册表或利用工具(K-MAC)
+			重装网卡恢复
+			Linux(重启恢复):
+				ifconfig down eth0(网卡名)
+				ifconfig etho hw ether 00:00:21:EA:2B:0A
+				ifconfig up eth0
+		电子邮件假冒
+			默认的邮件服务器不会检测发送的邮件地址是否是真的地址
+		数据加密
+			硬盘数据加密:PGPDisk,TrueEncrypt等
+			电子邮件加密:PGP
+			通信加密:SSH,SSL
+	目标系统信息收集
+		网络信息探测
+			基于whois数据库的信息探测
+				www.whois.net
+				www.cnnic.com.cn
+				whois是查询Internet注册信息的标准协议,服务
+				旁注攻击:攻击某IP的某网站来攻击与其同IP的另一网站
+				Unix系统中:
+					whois yahoo.com
+			基于搜索引擎的信息探测
+				搜索引擎的高级搜索功能,一些特定语法等,操作关键符
+				<google hack>
+			IP地理位置的信息探测
+		域名信息探测
+			nslookup命令(linux和Windows)
+			linux中 host命令
+		网络连通性探测
+			ping命令(发送ICMP协议包)会被防火墙默认过滤掉
+			Windows和linux参数有些不同
+	弱点信息挖掘分析
+	目标使用权限获取
+	攻击行为隐蔽
+	攻击实施
+	开辟后门
+	攻击痕迹清除
