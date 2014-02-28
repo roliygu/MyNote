@@ -1,0 +1,24 @@
+1.双引号
+	把搜索词放在双引号中代表完全匹配搜索
+2.减号
+	词1 -词2
+	搜索不跟词2的包含词1的页面
+3.星号
+	搜索*擎
+	*号可代表任何字
+4.inurl 	
+	inurl 词1
+	将返回url中包含词1的网页
+5.inanchor
+	指令返回的结果是导入链接锚文字中包含搜索词的页面。百度不支持inanchor:。
+6.intitle
+	intitle: 词
+	返回页面title中包含关键词的页面
+7.allintitle和allinurl
+8.filetype
+	filetype:pdf xxx
+9.site
+	site:www.baidu.com
+10.link
+	link:shuba.com
+	包含该链接的页面

@@ -1,3 +1,8 @@
+比较容易被攻击的服务
+Sendmail 
+Wu-Ftp
+ARP协议的一个缺陷是,在a没有发出请求确定IP-MAC请求时,可以收到IP-MAC应答包,也就是说,b可以直接向a发送应答包,a会直接将b的虚假IP-MAC包保存下来
+检测的话,如果命令arp -a之后发现同一个MAC地址对应多个IP地址,则有可能被欺骗
 网络攻防
 	攻击身份和位置隐藏
 		IP地址欺骗或盗用
@@ -34,9 +39,194 @@
 		网络连通性探测
 			ping命令(发送ICMP协议包)会被防火墙默认过滤掉
 			Windows和linux参数有些不同
+		路由信息探测
+			利用IP头部中的TTL字段
+			以次发送TTL从1开始的包,利用回收到的探测路由路径
+			traceroute 目标地址(Unix)
+			tracert 目标地址   (Windows)
+			VisualRoute可视化工具
+		局域网信息探测
+			主机发现技术
+				ICMP协议
+				ARP协议
+			共享资源探测
+			侦查工具
+				LanSee
+				NetBrute
+			net share 查看自己主机共享内容
+		Unix/Linux系统网络信息探测
+			Finger---通过网络远程提供主机上的用户信息
+			rusers--向信任的主机提供用户信息
+			showmount--列举一台机器上共享的所有目录及相关信息
+			rpcifo--报告一台主机上注册了的可供外部进程调用的过程服务的编号,版本,协议,端口和名称等
+			NIS/NIS+--网络信息服务
+		获取目标网络/主机信息的软件
+			端口扫描
+				寻找目标系统上提供的服务列表
+				FTP-21;SSH-22;Telnet-23;SMTP-25;HTTP-80;POP3-110
+				客户端的端口是从1025开始计的;服务端端口是固定的.
+			操作系统类型检测
+				间接探测
+					telnet 地址 端口号
+					HEAD/HTTP/1.1
+					HOST:网址
+					也就是说通过Web服务的头就可以知道版本信息
+				直接探测
+					Nmap工具
+					比间接更准确
+					OS不同
+						TTL不同:win-128;linux-256或64
+						FIN探测
+						BOGUS标记位
+						TCP初始序列号采样
+						DF标志位
+						TCP初始化"窗口"值
+						ACK值
+						ICMP出错信息
+						TCP选项
+			安全漏洞扫描
+				Nessus工具
+				Retina(主要是Windows的漏洞)工具
+				SSS(Shadow Security Scanner)工具
+				系统漏洞
+				特定服务漏洞
+				等等
 	弱点信息挖掘分析
+		应用服务软件漏洞
+			邮件服务系统
+				弱口令
+				存储空间大小没有限制
+				邮件明文传输,未经加密处理
+				允许随意转发
+				中继没有限制
+				没有过滤功能
+				无法完全识别恶意数据
+				发送邮件人身份无需验证和授权
+				邮件客户程序的非安全触发机制
+			Web服务
+				工具
+					Acunetix Web Vulnerability Scanner
+					NStealth
+					Whisker/LibWisker
+					Nikto
+					arirang
+				弱口令
+				非安全CGI程序
+				非安全服务配置
+				服务认证缺陷
+				应用编程语言漏洞
+			FTP服务
+				权限配置不当
+				泄漏软件版本信息
+				非法执行命令
+				存储容量无限制
+				通信连接无限制
+				明文传输
+			DNS服务
+				域名欺骗
+				网络信息泄漏
+				服务器拒绝服务
+				域名服务器的数据修改或破坏
+			路由服务漏洞
+				solawinds
+				引起IP地址冲突,破坏路由器的正常运行机制
+				破坏和干扰路由服务器域名解析
+				引起路由器物理地址冲突
+				构造垃圾网络数据包发送给路由器,造成拒绝服务攻击
+				劫持路由器之间的会话连接
+				破解路由器弱口令
+				伪造路由更新信息
+		通信协议漏洞
+			TCP/IP漏洞
+				tcpdump工具-网络数据报文检测工具
+				IP数据报源地址可以更改
+				可向服务器发送大量"SYN"请求包,实现拒绝服务攻击
+				TCP序列号空间有限,攻击者容易猜测
+				数据没有加密易遭窃听
+			网络共享协议漏洞
+				共享目录读写权限过大
+		程序安全缺陷
+			缓冲区溢出
+				Windows系统中的服务程序
+				Unix/Linux中的SUID(SetUid)程序
+			系统调用不当
+			系统调用不做出错处理
+			随意接受外部输入,对输入不做安全检查
+			计算资源无限制
+		操作系统漏洞
+			用户认证漏洞
+				ctrl+E进入单用户模式,新建后门用户
+		客户端软件漏洞
+			浏览器
+			Office
+			电子邮件
+			压缩软件PDF Reader等
+		弱点数据库
+			http://packetstormsecurity.com/
+			http://www.milworm.com/
 	目标使用权限获取
+		社交活动的权限获取
+		网络监听的权限获取
+			网络协议分析器
+				Sniffer Pro
+				Iris
+				Ethereal
+				TcpDump
+			专用网络数据监听工具
+				sniffit
+				Dsniff-可以处理SSL
+				xsnniff-win2000以后的系统不能用了...
+			特定应用的网络数据监听工具
+				MsnSniffer
+		网络系统弱点的权限获取
+		网络帐号口令破解的权限获取
+			字典猜解
+			穷举攻击
+			工具:smbCrack2,Brutus
+			SQLdict破解微软数据库密码
+			POP3邮件口令破解工具,HScan
+			流光,朔雪
+		Windows SAM文件保存用户密码信息,仅系统用户可以操作
+			方法1.通过物理接触主机,即用另外的系统启动原磁盘
+			方法2.获取systemroot\repair\sam.文件,这个文件是备份文件.用户短期未更改密码情况下可用
+			3.使用pwdump工具从注册表中导出SAM散列值,转储成类似于Unix系统的passwd格式文件
+			4.从网络嗅探分析SMB报文,从中获取密码散列字符串
+			本地密码散列导出工具
+				pwdump4
+				copypwd
+			本地密码破解工具
+				L0phtCrack
+				SANInside
+		Linux/Unix口令破解
+			工具:John the Ripper
+		网络欺骗的权限获取
+		会话劫持的权限获取			
 	攻击行为隐蔽
+		进程活动隐藏
+		文件隐藏
+		网络连接隐藏
+			netstat -an 查看所有连接和端口
 	攻击实施
 	开辟后门
+		内核后门
+		boot块后门
+			MBR信息
+		网页木马后门
+	远程控制
+		第四代-OS底层,具有进程隐藏功能
+		自启动技术
+			windows启动目录
+			注册表启动
+				HKLM\Software|Microsoft\Widows\CurrentVersion\Run
+				HKCR\exefile\shell\open\command 修改例如打开txt文件默认的程序
+					如果exe文件被人修改了关联方式,则只要把exe后缀改为com就可运行
+				AutoRuns安全防御软件
+			其他启动
+				autorun.inf 病毒
+
 	攻击痕迹清除
+
+61.155.165.27
+123.125.114.197
+180.149.131.33
+112.90.85.140
