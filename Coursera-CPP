@@ -1,0 +1,44 @@
+函数指针
+类型名 (*指针变量名)(参数类型1, 参数类型2,...);
+e.g.
+	int min(int a,int b){return a<b;}
+	int (*pf)(int, char);
+	pf = min;
+	pf(1,2) 			//函数指针名(实参表)
+C语言中的qsort函数
+	void qsort(void *base, int nelem, unsigned int width,
+	int(*pfCompare)(const void *,const void *))
+	比较函数编写规则
+		elem1排在elem2前面,返回值为负整数
+		相等,返回0
+		排在后面,返回正整数
+	int myCompare(const void *elem1, const void *elem2){
+		unsigned int *p1,*p2;
+		p1 = (unsigned int *)elem1;
+		p2 = (unsigned int *)elem2;
+		return (*p1 %10)-(*p2 %10);
+	}
+	#define Num 5
+	int main(){
+		unsigned int an[Num]={8,123,11,10,4};
+		qsort(an, Num,sizeof(unsigned int), myCompare);
+		for(int i=0;i<Num;i++)
+		printf("%d",an[i]);
+		return 0;
+	}
+位运算
+	n = n & 0xffffff00;
+	n&=0xff00; n是short型
+	a^b=c 那么 c^b=a,c^a=b
+	~位取反
+引用
+	定义引用时一定要将其初始化成某个变量
+	初始化后,就一直引用该变量,不会再引用别的变量
+	引用只能引用变量,不能引用常量和表达式
+	常引用:不能再通过引用修改原值
+	常量指针:不能通过常量指针修改其指向的内容;不能把常量指针赋值给非常量指针,反过来可以;
+int *p = new int[20]
+delete []p;
+对象数组的初始化
+	Test array[3]={1,Test(1,2)};
+	array[0]用Test(1)初始化;array[1]用Test(1,2)初始化;array[2]用Test()初始化

@@ -28,7 +28,7 @@ sumOfSquares: (x: Double,y:Doble)Double
 
 
 /*
-def power(x: Double,y Int)[: Double (·µ»ØÀàĞÍ£¬¿ÉÒÔÊ¡ÂÔ)]= ...
+def power(x: Double,y Int)[: Double (è¿”å›ç±»å‹ï¼Œå¯ä»¥çœç•¥)]= ...
 int 32-bit     double 64-bit
 */
 
@@ -39,7 +39,7 @@ scala> abs(-10)
 res5: Int = 10
 
 /*
-²¼¶û²Ù×÷£º
+å¸ƒå°”æ“ä½œï¼š
 ture false
 !b
 b && b
@@ -47,7 +47,7 @@ b || b
 e <= e,e >= e,e < e,e > e,e == e,e != e
 !ture ---- false
 !false ---- true
-true && e(eÊÇÈÎÒâ±äÁ¿) ---- e
+true && e(eæ˜¯ä»»æ„å˜é‡) ---- e
 false && e ---- false
 true || e ---- true
 false || e ---- e
@@ -107,5 +107,5 @@ class Rational(x: Int,y: Int){
 	def sub(that: Rational) = add(that.neg)
 		
 }
-###################################### ·ÖÊıÀà ########################################
+###################################### åˆ†æ•°ç±» ########################################
 //////////////////////////////////////////////////////////////////////////////////////
