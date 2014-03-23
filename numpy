@@ -163,3 +163,7 @@ array([ 5.,  4.,  3.,  5.])
 >>> for idx,color in enumerate("rgbyck"):
 	plt.subplot(321+idx,axisbg=color)
 >>> plt.show()
+
+>>>import numpy as np
+>>>from StringIO import StringIO
+#data I/O
