@@ -1,6 +1,10 @@
 from numpy import *
 a = array([1,2,3,4])
 c = array([[1,2,3,4],[4,5,6,7],[7,8,9,10]])
+a.dtype
+#a的元素类型
+d = zeros((3,4)[,dtype=int16])
+d = ones((3,2)[,dtype=int16])
 把c看作矩阵的话,形状如下
 1 2 3 4
 4 5 6 7
@@ -167,3 +171,11 @@ array([ 5.,  4.,  3.,  5.])
 >>>import numpy as np
 >>>from StringIO import StringIO
 #data I/O
+>>data = "1 2 3\n4 5 6"
+>>np.genfromtxt(StringIO(data), delimiter=" ")
+array([[1.,2.,3.],
+       [4.,5.,6.]])
+# The delimiter keyword is used to define how the splitting should take place.
+# if you don't set the delimiter, meaning that the line is split along white
+# spaces
+

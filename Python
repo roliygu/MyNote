@@ -40,3 +40,12 @@
 			pass 		完全继承...
 
 
+Python的特殊写法:
+1.交换两个元素
+	(a, b) = (b, a)
+2.将列表里元素取出
+	list = ['dog','Fido',10]
+	(animal, name, age) = list
+3.将字符列表拼接成字符串
+	list = ['True','False','File not found']
+	result_string = ' '.join(list)
