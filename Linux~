@@ -3,5 +3,3 @@ Shell中：export PATH=$PATH:/some/directory 修改终端的环境变量
 /etc/profile加上这句export PATH=$PATH:/path1:/path2:/pahtn
 source ./etc/profile 修改系统环境变量
 tar -xf xxx.tar.bz2 解压缩
-ln -s f1 f2 创建f1的软链接到f2,没有-s参数时硬链接
-& houtai
