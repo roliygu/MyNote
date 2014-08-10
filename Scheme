@@ -1,3 +1,23 @@
+Racket
+http://racket-lang.org/
+
+#lang racket
+(provide (all-defined-out))
+
+(define x 3)
+(define y (+ x 2))
+
+(define cube1
+    (lambda (x)
+      (* x ( * x x))))
+
+(define cube2
+    (lambda (x)
+      (* x x )))
+
+(define (cube3 x)
+  (* x x x))
+
 > (+ 2 3)
 5
 > (+ (* 3(+ (* 2 4)(+ 3 5)))(+(- 10 7) 6))
